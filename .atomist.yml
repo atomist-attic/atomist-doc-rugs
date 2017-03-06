@@ -1,0 +1,31 @@
+---
+kind: "operation"
+client: "rug-cli 0.24.0"
+generator:
+  name: "NewStarterRugProject"
+  group: "atomist-rugs"
+  artifact: "rug-project"
+  version: "0.3.0"
+  origin:
+    repo: "git@github.com:atomist-rugs/rug-project.git"
+    branch: "master"
+    sha: "ca003e2"
+  parameters:
+    - "project_name": "atomist-doc-rugs"
+
+---
+kind: "operation"
+client: "rug-cli 0.24.0"
+editor:
+  name: "AddTypeScriptEditor"
+  group: "atomist-rugs"
+  artifact: "rug-editors"
+  version: "0.13.0"
+  origin:
+    repo: "git@github.com:atomist-rugs/rug-editors.git"
+    branch: "master"
+    sha: "1a6a632"
+  parameters:
+    - "editor_name": "AddMarkdownDocumentToMkDocsProject"
+    - "description": "name of an extra page to add to project"
+
