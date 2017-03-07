@@ -1,28 +1,23 @@
-import { Given, When, Then, Result } from "@atomist/rug/test/Core"
-import { Project } from "@atomist/rug/model/Project"
-import { NewMkDocsDocumentationProject } from "../editors/NewMkDocsDocumentationProject"
-import { AddMarkdownDocumentToMkDocsProject } from "../editors/AddMarkdownDocumentToMkDocsProject"
+import { Given, When, Then, Result, ProjectScenarioWorld } from "@atomist/rug/test/Core";
+import { Project } from "@atomist/rug/model/Project";
 
-Given("a default mkdocs project", p => {
+Given("a default mkdocs project", (p: Project) => {
   p.addFile("mkdocs.yml", "site_name: My Docs");
   p.addDirectory("docs", ".");
   p.addFile("docs/index.md", "blah");
 });
 
-When("running the MkDocs generator", p => {
-  let generator: NewMkDocsDocumentationProject = new NewMkDocsDocumentationProject();
-  generator.extraDoc = "tutorials.md";
-  generator.populate(p);
+When("running the MkDocs generator", (p: Project, world: ProjectScenarioWorld) => {
+  let generator = world.generator("NewMkDocsDocumentationProject");
+  world.generateWith(generator, {"extraDoc": "tutorials.md"});
 });
 
-Then("we have the MkDocs settings file and base structure", p => {
-    var r: boolean = true;
-    
-    r = r && p.fileExists("mkdocs.yml");
-    r = r && p.directoryExists("docs");
-    r = r && p.fileExists("docs/index.md");
-    r = r && p.fileExists("docs/tutorials.md");
+Then("we have the MkDocs settings file and base structure", (p: Project) => {
 
-    // I could do better than this I guess
-    return new Result(r, "project creation result");
+    if( !p.fileExists("mkdocs.yml")) return new Result(false, "missing mkdocs.yml file");
+    if( !p.directoryExists("docs")) return new Result(false, "missing docs directory");
+    if( !p.fileExists("docs/index.md")) return new Result(false, "missing docs/index.md file");
+    if( !p.fileExists("docs/tutorials.md")) return new Result(false, "missing docs/tutorials.md file");
+
+    return true;
 });
